@@ -14,18 +14,29 @@ function randomDraw(deckSize){
         }
     }
 }
-function dealFunction(){ //deal cards
+function cardDraw(){
     deckSize --;
     if (deckSize <= 0){
-        document.getElementById('outcome').innerHTML = ('Deck is depleted!');
-        return;
+        //document.getElementById('outcome').innerHTML = ('Deck is depleted!');
+        return ('Deck is depleted!');
     }
     var card_outcome = randomDraw(deckSize);
     var size_suits = suits[card_outcome].length;
     var remove_suit = Math.floor((Math.random() * size_suits));
     var outcome_suit = suits[card_outcome][remove_suit];
     suits[card_outcome].splice(remove_suit, 1);
-    document.getElementById('outcome').innerHTML = (card_outcome + ' of ' + outcome_suit);
+    return (card_outcome + ' of ' + outcome_suit)
+}
+function dealCards(){
+    res = ''
+    for (let step = 0; step < 4; step++){
+        res += ' ' + cardDraw() + ' | '
+    }
+    document.getElementById('deal cards').innerHTML = res;
+}
+
+function hit(){ //deal cards
+    document.getElementById('outcome').innerHTML = cardDraw()
 }
 
 function resetGame(){ //Reset all variables, except score
