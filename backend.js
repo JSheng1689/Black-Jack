@@ -23,7 +23,7 @@ function dealFunction(){ //deal cards
     }
     var card_outcome = randomDraw(deckSize);
     var size_suits = suits[card_outcome].length;
-    var remove_suit = Math.floor((Math.random() * size_suits) + 1);
+    var remove_suit = Math.floor((Math.random() * size_suits));
     var outcome_suit = suits[card_outcome][remove_suit];
     suits[card_outcome].splice(remove_suit, 1);
     document.getElementById('outcome').innerHTML = (card_outcome + ' of ' + outcome_suit);
