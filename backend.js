@@ -2,10 +2,14 @@ var deck = {'A': 4, 'K': 4, 'Q': 4, 'J': 4, 10 : 4, 9 : 4, 8 : 4, 7 : 4, 6 : 4, 
 var lst_suits = ['Diamonds', 'Clubs', 'Hearts', 'Spades'];
 var suits = {'A': [...lst_suits], 'K': [...lst_suits], 'Q': [...lst_suits], 'J': [...lst_suits], 10 : [...lst_suits], 9 : [...lst_suits], 8 : [...lst_suits], 7 : [...lst_suits], 6 : [...lst_suits], 5 : [...lst_suits], 4 :  [...lst_suits], 3 : [...lst_suits], 2 : [...lst_suits]};
 var deckSize = 52;
+var player_cards = []
+var dealer_cards = []
 
-function randomDraw(deckSize){
+function randomDraw(deckSize){//Helper function to randomize card draw
+    //Returns the number of the card
     var select = Math.floor((Math.random() * deckSize) + 1);
     var running = 0;
+    //Randomly finds card to draw, without knowing suit
     for (var card in deck){
         running += deck[card]
         if (running >= select){
@@ -14,35 +18,69 @@ function randomDraw(deckSize){
         }
     }
 }
-function cardDraw(){
+
+function cardDraw(){//Helper function, draws card
+    //Returns an array of number of card and suit
     deckSize --;
     if (deckSize <= 0){
-        //document.getElementById('outcome').innerHTML = ('Deck is depleted!');
         return ('Deck is depleted!');
     }
     var card_outcome = randomDraw(deckSize);
     var size_suits = suits[card_outcome].length;
     var remove_suit = Math.floor((Math.random() * size_suits));
     var outcome_suit = suits[card_outcome][remove_suit];
-    suits[card_outcome].splice(remove_suit, 1);
-    return (card_outcome + ' of ' + outcome_suit)
+    suits[card_outcome].splice(remove_suit, 1);//Removes suit from deck
+    return [card_outcome, outcome_suit];
 }
-function dealCards(){
+
+function dealCards(){//Deals Card
+    //Returns values of cards in player's hand and dealer's hadnd
     res = ''
     for (let step = 0; step < 4; step++){
-        res += ' ' + cardDraw() + ' | '
+        card_drawn_lst= cardDraw()
+        res += ' ' + card_drawn_lst[0] + ' of ' + card_drawn_lst[1] + ' | ';
+        if (step % 2 == 0){
+            player_cards.push(card_drawn_lst[0])
+        }
+        else{
+            dealer_cards.push(card_drawn_lst[1])
+        }
     }
     document.getElementById('deal cards').innerHTML = res;
+    return [player_cards, dealer_cards];
 }
 
-function hit(){ //deal cards
-    document.getElementById('outcome').innerHTML = cardDraw()
+function hit(){//hit
+    //Return value of card hit
+    cardDrawn_lst = cardDraw();
+    document.getElementById('outcome').innerHTML = (cardDrawn_lst[0] + ' of ' + cardDrawn_lst[1]);
+    player_cards.push(cardDrawn_lst[0])
+    return cardDrawn_lst[0];
 }
 
-function resetGame(){ //Reset all variables, except score
+function resetGame(){//Reset all variables, except score
     deck = {'A': 4, 'K': 4, 'Q': 4, 'J': 4, 10 : 4, 9 : 4, 8 : 4, 7 : 4, 6 : 4, 5 : 4, 4 : 4, 3 : 4, 2 : 4};
     lst_suits = ['Diamonds', 'Clubs', 'Hearts', 'Spades'];
     suits = {'A': [...lst_suits], 'K': [...lst_suits], 'Q': [...lst_suits], 'J': [...lst_suits], 10 : [...lst_suits], 9 : [...lst_suits], 8 : [...lst_suits], 7 : [...lst_suits], 6 : [...lst_suits], 5 : [...lst_suits], 4 :  [...lst_suits], 3 : [...lst_suits], 2 : [...lst_suits]};
     deckSize = 52;
     document.getElementById('outcome').innerHTML = ('Deck Reset!');
 }
+
+// stand returning weird values
+function stand(){ //sum up current hold
+    var counter = 0;
+    for (var value in player_cards){
+        if (value == 'A'){
+            counter += 11
+        }
+        else if (value == 'K' || value == 'Q' || value == 'J'){
+            counter += 10;
+        }
+        else{
+            counter += parseInt(value)
+        }
+    }
+    console.log(counter)
+    return counter
+}
+
