@@ -35,18 +35,22 @@ function cardDraw(){//Helper function, draws card
 
 function dealCards(){//Deals Card
     //Returns values of cards in player's hand and dealer's hadnd
-    res = ''
+    dealer = ''
+    player = ''
     for (let step = 0; step < 4; step++){
         card_drawn_lst= cardDraw()
-        res += ' ' + card_drawn_lst[0] + ' of ' + card_drawn_lst[1] + ' | ';
         if (step % 2 == 0){
+            player += ' ' + card_drawn_lst[0] + ' of ' + card_drawn_lst[1] + ' | ';
             player_cards.push(card_drawn_lst[0])
         }
         else{
+            dealer += ' ' + card_drawn_lst[0] + ' of ' + card_drawn_lst[1] + ' | ';
             dealer_cards.push(card_drawn_lst[1])
         }
     }
-    document.getElementById('deal cards').innerHTML = res;
+    document.getElementById('deal cards').innerHTML = "Dealer's cards: " + dealer;
+    document.getElementById('play cards').innerHTML = "Player's cards: " + player;
+
     return [player_cards, dealer_cards];
 }
 
@@ -69,15 +73,15 @@ function resetGame(){//Reset all variables, except score
 // stand returning weird values
 function stand(){ //sum up current hold
     var counter = 0;
-    for (var value in player_cards){
-        if (value == 'A'){
+    for (index =0; index < player_cards.length; index ++){
+        if (player_cards[index] == 'A'){
             counter += 11
         }
-        else if (value == 'K' || value == 'Q' || value == 'J'){
+        else if (player_cards[index] == 'K' || player_cards[index] == 'Q' || player_cards[index] == 'J'){
             counter += 10;
         }
         else{
-            counter += parseInt(value)
+            counter += parseInt(player_cards[index])
         }
     }
     console.log(counter)
