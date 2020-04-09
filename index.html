@@ -11,11 +11,14 @@
     <link rel="stylesheet" href="style.css?v=1.0">
 
 </head>
-
+<h1>
+<script src = 'backend.js'></script>
+</h1>
 <body>
   <h1> The BlackJack Game </h1>
+  <h1 id='outcome'></h1>
   <div class="scene">
-    <button type="button" class="btn btn-deal">Deal</button>
+    <button type="button" class="btn btn-deal" onclick='dealFunction()'>Deal</button>
     <button type="button" class="btn btn-hit">Hit</button>
     <button type="button" class="btn btn-stand">Stand</button>
     <button type="button" class="btn btn-playAgain">Play Again</button>
@@ -25,9 +28,8 @@
     <button type="button" class="btn btn-circle chip100">$100</button>
     <button type="button" class="btn btn-circle chip500">$500</button>
     
-  <div>
+  </div>
+  <h2 id='card result'></h6>
 
-
-  <script src="js/scripts.js"></script>
 </body>
 </html>
