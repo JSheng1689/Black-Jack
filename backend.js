@@ -42,10 +42,12 @@ function dealCards(){//Deals Card
         if (step % 2 == 0){
             player += ' ' + card_drawn_lst[0] + ' of ' + card_drawn_lst[1] + ' | ';
             player_cards.push(card_drawn_lst[0])
+            cardPicture(card_drawn_lst[0],card_drawn_lst[1],true,player_cards.length);
         }
         else{
             dealer += ' ' + card_drawn_lst[0] + ' of ' + card_drawn_lst[1] + ' | ';
             dealer_cards.push(card_drawn_lst[1])
+            cardPicture(card_drawn_lst[0],card_drawn_lst[1],false,dealer_cards.length);
         }
     }
     document.getElementById('deal cards').innerHTML = "Dealer's cards: " + dealer;
@@ -59,6 +61,7 @@ function hit(){//hit
     cardDrawn_lst = cardDraw();
     document.getElementById('outcome').innerHTML = (cardDrawn_lst[0] + ' of ' + cardDrawn_lst[1]);
     player_cards.push(cardDrawn_lst[0])
+    cardPicture(cardDrawn_lst[0],cardDrawn_lst[1],true,player_cards.length);
     return cardDrawn_lst[0];
 }
 
@@ -68,11 +71,13 @@ function resetGame(){//Reset all variables, except score
     suits = {'A': [...lst_suits], 'K': [...lst_suits], 'Q': [...lst_suits], 'J': [...lst_suits], 10 : [...lst_suits], 9 : [...lst_suits], 8 : [...lst_suits], 7 : [...lst_suits], 6 : [...lst_suits], 5 : [...lst_suits], 4 :  [...lst_suits], 3 : [...lst_suits], 2 : [...lst_suits]};
     deckSize = 52;
     document.getElementById('outcome').innerHTML = ('Deck Reset!');
+    document.getElementById('addHere').innerHTML = "";
+    player_cards=[];
+    dealer_cards=[];
 }
 
 // stand returning weird values
 function stand(){ //sum up current hold
-    //doesn't clear counter after play again FIX
     var counter = 0;
     for (index =0; index < player_cards.length; index ++){
         if (player_cards[index] == 'A'){
@@ -88,4 +93,17 @@ function stand(){ //sum up current hold
     console.log(counter)
     return counter
 }
-
+function cardPicture(cardNum,suit,playerOrDealer,numCard){
+    //if playerOrComp is true, means it's the player's card. If false, means it's the dealer's card
+    var newImg = document.createElement('img');
+    newImg.setAttribute('src','assets/'+cardNum+ '_of_' + suit+'.png');
+    newImg.setAttribute('class', 'card');
+    if(playerOrDealer){
+        newImg.className+=' card-player';
+    }
+    else{
+        newImg.className+=' card-dealer';
+    }
+    newImg.style.left = (30+(numCard-1)*10+'%');
+    document.getElementById('addHere').appendChild(newImg);
+}
