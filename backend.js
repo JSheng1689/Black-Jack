@@ -5,8 +5,7 @@ var deckSize = 52;
 var player_cards = []
 var dealer_cards = []
 var betting_amount = 0
-//CHANGE
-var hiddenCard;
+var hiddenCard; 
 
 function randomDraw(deckSize){//Helper function to randomize card draw
     //Returns the number of the card
@@ -38,31 +37,23 @@ function cardDraw(){//Helper function, draws card
 
 function dealCards(){//Deals Card
     //Returns values of cards in player's hand and dealer's hadnd
-    dealer = ''
-    player = ''
     for (let step = 0; step < 4; step++){
         card_drawn_lst= cardDraw()
         if (step % 2 == 0){
-            player += ' ' + card_drawn_lst[0] + ' of ' + card_drawn_lst[1] + ' | ';
             player_cards.push(card_drawn_lst[0])
             cardPicture(card_drawn_lst[0],card_drawn_lst[1],true,player_cards.length);
         }
         else{
-            dealer += ' ' + card_drawn_lst[0] + ' of ' + card_drawn_lst[1] + ' | ';
             dealer_cards.push(card_drawn_lst[0])
             cardPicture(card_drawn_lst[0],card_drawn_lst[1],false,dealer_cards.length);
         }
     }
-    document.getElementById('deal cards').innerHTML = "Dealer's cards: " + dealer;
-    document.getElementById('play cards').innerHTML = "Player's cards: " + player;
-
     return [player_cards, dealer_cards];
 }
 
 function hit(){//hit
     //Return value of card hit
     cardDrawn_lst = cardDraw();
-    document.getElementById('outcome').innerHTML = (cardDrawn_lst[0] + ' of ' + cardDrawn_lst[1]);
     player_cards.push(cardDrawn_lst[0])
     cardPicture(cardDrawn_lst[0],cardDrawn_lst[1],true,player_cards.length);
     return cardDrawn_lst[0];
@@ -87,7 +78,7 @@ function stand(){ //sum up current hold
     var hasAce = false;
     for (index =0; index < player_cards.length; index ++){
         if (player_cards[index] == 'A'){
-            hasAce = True;
+            hasAce = true;
         }
         else if (player_cards[index] == 'K' || player_cards[index] == 'Q' || player_cards[index] == 'J'){
             counter += 10;
@@ -105,7 +96,6 @@ function stand(){ //sum up current hold
         }
     }
     console.log("Sum of player hand " + counter)
-    //CHANGE
     document.getElementById('dealerFirstCard').src=(hiddenCard);
     dealerTurn(counter)
 }
@@ -114,7 +104,7 @@ function dealerTurn(player_value){
     var counter = 0;
     for (index = 0; index < dealer_cards.length; index ++){
         if (dealer_cards[index] == 'A'){
-            hasAce = True;
+            hasAce = true;
         }
         else if (dealer_cards[index] == 'K' || dealer_cards[index] == 'Q' || dealer_cards[index] == 'J'){
             counter += 10;
@@ -132,16 +122,15 @@ function dealerTurn(player_value){
         }
     }
     console.log("Sum of dealer hand "+ counter)
-    if (counter >= 17){
-        if (player_value > counter){
-            document.getElementById('result').innerHTML = ('Result: You Win!');
-        }
-        else if (player_value == counter){
-            document.getElementById('result').innerHTML = ('Result: A Push!');
-        }
-        else{
-            document.getElementById('result').innerHTML = ('Result: Dealer Wins :(');
-        }
+    //Dealer never draws, add in that functionality
+    if (player_value > counter){
+        document.getElementById('result').innerHTML = ('Result: You Win!');
+    }
+    else if (player_value == counter){
+        document.getElementById('result').innerHTML = ('Result: A Push!');
+    }
+    else{
+        document.getElementById('result').innerHTML = ('Result: Dealer Wins :(');
     }
 }
 function cardPicture(cardNum,suit,playerOrDealer,numCard){
@@ -153,11 +142,9 @@ function cardPicture(cardNum,suit,playerOrDealer,numCard){
         newImg.className+=' card-player';
     }
     else{
-        //CHANGE
         if(numCard==1){
             newImg.setAttribute('src','assets/back.png');
             newImg.setAttribute('id','dealerFirstCard');
-            //newImg.setAttribute('alt','assets/'+cardNum+ '_of_' + suit+'.png');
             hiddenCard=('src','assets/'+cardNum+ '_of_' + suit+'.png');
         }
         newImg.className+=' card-dealer';
