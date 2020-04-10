@@ -1,3 +1,5 @@
+
+
 h1{
     color:black;
     
@@ -87,15 +89,18 @@ h1{
     bottom:400px;
     left:450px;
 }
-.card-none{
-    position:absolute;
-
+.card{
+    height:20/3%;
+    width:10%;
+    background-color:white;
 }
-.card-back{
+.card-dealer{
     position:absolute;
-
+    top:20%;
+    left:30%;
 }
-.card-front{
+.card-player{
     position:absolute;
-
+    top:50%;
+    left:30%;
 }
