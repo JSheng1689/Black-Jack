@@ -10,7 +10,7 @@ function randomDraw(deckSize){//Helper function to randomize card draw
     var select = Math.floor((Math.random() * deckSize) + 1);
     var running = 0;
     //Randomly finds card to draw, without knowing suit
-    for (var card in ERRORERRORERRORROSOGDGNDOJNdeck){
+    for (var card in deck){
         running += deck[card]
         if (running >= select){
             deck[card] -= 1;
