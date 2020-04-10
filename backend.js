@@ -1,3 +1,4 @@
+// Ace value not calculated, betting system, don't show value of dealer hand when calculateHand is called
 var deck = {'A': 4, 'K': 4, 'Q': 4, 'J': 4, 10 : 4, 9 : 4, 8 : 4, 7 : 4, 6 : 4, 5 : 4, 4 : 4, 3 : 4, 2 : 4};
 var lst_suits = ['Diamonds', 'Clubs', 'Hearts', 'Spades'];
 var suits = {'A': [...lst_suits], 'K': [...lst_suits], 'Q': [...lst_suits], 'J': [...lst_suits], 10 : [...lst_suits], 9 : [...lst_suits], 8 : [...lst_suits], 7 : [...lst_suits], 6 : [...lst_suits], 5 : [...lst_suits], 4 :  [...lst_suits], 3 : [...lst_suits], 2 : [...lst_suits]};
@@ -56,9 +57,33 @@ function hit(){//hit
     cardDrawn_lst = cardDraw();
     player_cards.push(cardDrawn_lst[0])
     cardPicture(cardDrawn_lst[0],cardDrawn_lst[1],true,player_cards.length);
+    if (calculateHand(player_cards)[0] > 21){
+        document.getElementById('result').innerHTML = ('Busted!')
+    }
     return cardDrawn_lst[0];
 }
-
+function calculateHand(handArray){
+    var hasAce = false;
+    var value = 0;
+    for (index = 0; index < handArray.length; index ++){
+        if (handArray[index] == 'A'){
+            hasAce = true;
+        }
+        else if (handArray[index] == 'K' || handArray[index] == 'Q' || handArray[index] == 'J'){
+            value += 10;
+        }
+        else{
+            value += parseInt(handArray[index])
+        }
+    }
+    if (handArray == dealer_cards){
+        document.getElementById('dealer-score').innerHTML = value
+    }
+    else{
+        document.getElementById('player-score').innerHTML = value
+    }
+    return [value, hasAce]
+}
 function resetGame(){//Reset all variables, except score
     deck = {'A': 4, 'K': 4, 'Q': 4, 'J': 4, 10 : 4, 9 : 4, 8 : 4, 7 : 4, 6 : 4, 5 : 4, 4 : 4, 3 : 4, 2 : 4};
     lst_suits = ['Diamonds', 'Clubs', 'Hearts', 'Spades'];
@@ -74,59 +99,39 @@ function resetGame(){//Reset all variables, except score
 
 // stand returning weird values
 function stand(){ //sum up current hold
-    var counter = 0;
     var hasAce = false;
-    for (index =0; index < player_cards.length; index ++){
-        if (player_cards[index] == 'A'){
-            hasAce = true;
-        }
-        else if (player_cards[index] == 'K' || player_cards[index] == 'Q' || player_cards[index] == 'J'){
-            counter += 10;
-        }
-        else{
-            counter += parseInt(player_cards[index])
-        }
-    }
+    var player_sum = calculateHand(player_cards)[0]
+    var hasAce = calculateHand(player_cards)[1]
     if (hasAce){
-        if (counter + 11 > 21){
-            counter += 1
+        if (player_sum + 11 > 21){
+            player_sum += 1
         }
         else{
-            counter += 11
+            player_sum += 11
         }
     }
-    console.log("Sum of player hand " + counter)
+    console.log("Sum of player hand " + player_sum)
     document.getElementById('dealerFirstCard').src=(hiddenCard);
-    dealerTurn(counter)
+    dealerTurn(player_sum)
 }
 function dealerTurn(player_value){
     var hasAce = false;
-    var counter = 0;
-    for (index = 0; index < dealer_cards.length; index ++){
-        if (dealer_cards[index] == 'A'){
-            hasAce = true;
-        }
-        else if (dealer_cards[index] == 'K' || dealer_cards[index] == 'Q' || dealer_cards[index] == 'J'){
-            counter += 10;
-        }
-        else{
-            counter += parseInt(dealer_cards[index])
-        }
-    }
+    var dealer_sum = calculateHand(dealer_cards)[0]
+    var hasAce = calculateHand(dealer_cards)[1]
     if (hasAce){
-        if ((counter + 11 <= 21) && (counter + 11)>= 17){
-            counter += 11
+        if (dealer_sum + 11 > 21){
+            dealer_sum += 1
         }
         else{
-            counter += 1
+            dealer_sum += 11
         }
     }
-    console.log("Sum of dealer hand "+ counter)
+    console.log("Sum of dealer hand "+ dealer_sum)
     //Dealer never draws, add in that functionality
-    if (player_value > counter){
+    if (player_value > dealer_sum){
         document.getElementById('result').innerHTML = ('Result: You Win!');
     }
-    else if (player_value == counter){
+    else if (player_value == dealer_sum){
         document.getElementById('result').innerHTML = ('Result: A Push!');
     }
     else{
