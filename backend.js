@@ -92,7 +92,6 @@ function stand(){ //sum up current hold
 }
 function cardPicture(cardNum,suit,playerOrDealer,numCard){
     //if playerOrComp is true, means it's the player's card. If false, means it's the dealer's card
-    console.log(cardNum+ '_of_' + suit);
     var newImg = document.createElement('img');
     newImg.setAttribute('src','assets/'+cardNum+ '_of_' + suit+'.png');
     newImg.setAttribute('class', 'card');
