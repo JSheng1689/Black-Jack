@@ -1,5 +1,3 @@
-
-
 h1{
     color:black;
     
@@ -106,11 +104,37 @@ h1{
 }
 .dealer-score{
     position:absolute;
-    top:5%;
-    left:30%;
+    top:25px;
+    left:300px;
+    background-color:#7ad7f0;
+    border: 2px solid black;
+    border-radius:10px;
+    width:100px;
+    height:70px;
+    font-size:50px;
+    text-align:center;
 }
 .player-score{
     position:absolute;
-    bottom:15%;
-    left:30%;
+    bottom:120px;
+    left:300px;
+    background-color:#7ad7f0;
+    border: 2px solid black;
+    border-radius:10px;
+    width:100px;
+    height:70px;
+    font-size:50px;
+    text-align:center;
+}
+.wallet{
+    position:absolute;
+    top:25px;
+    left:25px;
+    background-color:#98fb98;
+    border: 2px solid black;
+    border-radius:10px;
+    width:200px;
+    height:70px;
+    font-size:50px;
+    text-align:center;
 }
