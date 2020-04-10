@@ -71,6 +71,9 @@ function resetGame(){//Reset all variables, except score
     suits = {'A': [...lst_suits], 'K': [...lst_suits], 'Q': [...lst_suits], 'J': [...lst_suits], 10 : [...lst_suits], 9 : [...lst_suits], 8 : [...lst_suits], 7 : [...lst_suits], 6 : [...lst_suits], 5 : [...lst_suits], 4 :  [...lst_suits], 3 : [...lst_suits], 2 : [...lst_suits]};
     deckSize = 52;
     document.getElementById('outcome').innerHTML = ('Deck Reset!');
+    document.getElementById('addHere').innerHTML = "";
+    player_cards=[];
+    dealer_cards=[];
 }
 
 // stand returning weird values
