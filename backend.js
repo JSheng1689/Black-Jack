@@ -6,8 +6,10 @@ var deckSize = 52;
 var player_cards = []
 var dealer_cards = []
 var betting_amount = 0
+var wallet = 2000;//amount of money in the bank $$
+var handInProgress = false;//after the cards are dealt, the game is in progress until reset game
+var playerBusted = false;//conditional for if player is over 21
 var hiddenCard; 
-
 function randomDraw(deckSize){//Helper function to randomize card draw
     //Returns the number of the card
     var select = Math.floor((Math.random() * deckSize) + 1);
@@ -37,6 +39,7 @@ function cardDraw(){//Helper function, draws card
 }
 
 function dealCards(){//Deals Card
+    handInProgress = true;
     //Returns values of cards in player's hand and dealer's hadnd
     for (let step = 0; step < 4; step++){
         card_drawn_lst= cardDraw()
@@ -49,6 +52,7 @@ function dealCards(){//Deals Card
             cardPicture(card_drawn_lst[0],card_drawn_lst[1],false,dealer_cards.length);
         }
     }
+    calculateHand(player_cards)//added this so the player hand score shows
     return [player_cards, dealer_cards];
 }
 
@@ -59,6 +63,8 @@ function hit(){//hit
     cardPicture(cardDrawn_lst[0],cardDrawn_lst[1],true,player_cards.length);
     if (calculateHand(player_cards)[0] > 21){
         document.getElementById('result').innerHTML = ('Busted!')
+        playerBusted=true;//bust conditional becomes true
+        dealerTurn(calculateHand(player_cards));
     }
     return cardDrawn_lst[0];
 }
@@ -77,10 +83,10 @@ function calculateHand(handArray){
         }
     }
     if (handArray == dealer_cards){
-        document.getElementById('dealer-score').innerHTML = value
+        document.getElementById('dealer-score').innerHTML = value //updates dealer score in html
     }
     else{
-        document.getElementById('player-score').innerHTML = value
+        document.getElementById('player-score').innerHTML = value //updates player score in html
     }
     return [value, hasAce]
 }
@@ -95,24 +101,28 @@ function resetGame(){//Reset all variables, except score
     dealer_cards=[];
     betting_amount = 0;
     document.getElementById('bet counter').innerHTML = ('Amount Betted: ' + betting_amount);
+    handInProgress=false;
+    playerBusted=false;
 }
 
 // stand returning weird values
 function stand(){ //sum up current hold
-    var hasAce = false;
-    var player_sum = calculateHand(player_cards)[0]
-    var hasAce = calculateHand(player_cards)[1]
-    if (hasAce){
-        if (player_sum + 11 > 21){
-            player_sum += 1
+    if(playerBusted==false){ //if the player busted, the stand function is disabled
+        var hasAce = false;
+        var player_sum = calculateHand(player_cards)[0]
+        var hasAce = calculateHand(player_cards)[1]
+        if (hasAce){
+            if (player_sum + 11 > 21){
+                player_sum += 1
+            }
+            else{
+                player_sum += 11
+            }
         }
-        else{
-            player_sum += 11
-        }
+        console.log("Sum of player hand " + player_sum)
+        document.getElementById('dealerFirstCard').src=(hiddenCard);//reveals the dealer's first card that was face down
+        dealerTurn(player_sum)
     }
-    console.log("Sum of player hand " + player_sum)
-    document.getElementById('dealerFirstCard').src=(hiddenCard);
-    dealerTurn(player_sum)
 }
 function dealerTurn(player_value){
     var hasAce = false;
@@ -128,15 +138,19 @@ function dealerTurn(player_value){
     }
     console.log("Sum of dealer hand "+ dealer_sum)
     //Dealer never draws, add in that functionality
-    if (player_value > dealer_sum){
+    if (player_value > dealer_sum && playerBusted==false){ //if the player already busted, the result can't be a win
         document.getElementById('result').innerHTML = ('Result: You Win!');
+        wallet += (betting_amount*2) //refunds the bet paid and adds the bet again for profit
     }
     else if (player_value == dealer_sum){
         document.getElementById('result').innerHTML = ('Result: A Push!');
+        wallet+= betting_amount; //refunds the bet paid
     }
     else{
         document.getElementById('result').innerHTML = ('Result: Dealer Wins :(');
     }
+    document.getElementById('wallet').innerHTML=('$'+wallet); //updates wallet score in html
+
 }
 function cardPicture(cardNum,suit,playerOrDealer,numCard){
     //if playerOrComp is true, means it's the player's card. If false, means it's the dealer's card
@@ -154,11 +168,16 @@ function cardPicture(cardNum,suit,playerOrDealer,numCard){
         }
         newImg.className+=' card-dealer';
     }
-    newImg.style.left = (30+(numCard-1)*10+'%');
+    newImg.style.left = (300+(numCard-1)*100+'px');
     document.getElementById('addHere').appendChild(newImg);
 }
 
 function betChip(amount){
-    betting_amount += amount
-    document.getElementById('bet counter').innerHTML = ('Amount Betted: ' + betting_amount);
+    if(handInProgress==false){
+        betting_amount += amount
+        wallet -= amount;
+        document.getElementById('bet counter').innerHTML = ('Amount Betted: ' + betting_amount);
+        document.getElementById('wallet').innerHTML=('$'+wallet); //updates the wallet score
+
+    }
 }
