@@ -42,10 +42,12 @@ function dealCards(){//Deals Card
         if (step % 2 == 0){
             player += ' ' + card_drawn_lst[0] + ' of ' + card_drawn_lst[1] + ' | ';
             player_cards.push(card_drawn_lst[0])
+            cardPicture(card_drawn_lst[0],card_drawn_lst[1],true,player_cards.length);
         }
         else{
             dealer += ' ' + card_drawn_lst[0] + ' of ' + card_drawn_lst[1] + ' | ';
             dealer_cards.push(card_drawn_lst[1])
+            cardPicture(card_drawn_lst[0],card_drawn_lst[1],false,dealer_cards.length);
         }
     }
     document.getElementById('deal cards').innerHTML = "Dealer's cards: " + dealer;
@@ -59,6 +61,7 @@ function hit(){//hit
     cardDrawn_lst = cardDraw();
     document.getElementById('outcome').innerHTML = (cardDrawn_lst[0] + ' of ' + cardDrawn_lst[1]);
     player_cards.push(cardDrawn_lst[0])
+    cardPicture(cardDrawn_lst[0],cardDrawn_lst[1],true,player_cards.length);
     return cardDrawn_lst[0];
 }
 
@@ -87,4 +90,18 @@ function stand(){ //sum up current hold
     console.log(counter)
     return counter
 }
-
+function cardPicture(cardNum,suit,playerOrDealer,numCard){
+    //if playerOrComp is true, means it's the player's card. If false, means it's the dealer's card
+    console.log(cardNum+ '_of_' + suit);
+    var newImg = document.createElement('img');
+    newImg.setAttribute('src','assets/'+cardNum+ '_of_' + suit+'.png');
+    newImg.setAttribute('class', 'card');
+    if(playerOrDealer){
+        newImg.className+=' card-player';
+    }
+    else{
+        newImg.className+=' card-dealer';
+    }
+    newImg.style.left = (30+(numCard-1)*10+'%');
+    document.getElementById('addHere').appendChild(newImg);
+}
