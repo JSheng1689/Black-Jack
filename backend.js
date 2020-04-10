@@ -5,6 +5,8 @@ var deckSize = 52;
 var player_cards = []
 var dealer_cards = []
 var betting_amount = 0
+//CHANGE
+var hiddenCard;
 
 function randomDraw(deckSize){//Helper function to randomize card draw
     //Returns the number of the card
@@ -103,6 +105,8 @@ function stand(){ //sum up current hold
         }
     }
     console.log("Sum of player hand " + counter)
+    //CHANGE
+    document.getElementById('dealerFirstCard').src=(hiddenCard);
     dealerTurn(counter)
 }
 function dealerTurn(player_value){
@@ -149,6 +153,13 @@ function cardPicture(cardNum,suit,playerOrDealer,numCard){
         newImg.className+=' card-player';
     }
     else{
+        //CHANGE
+        if(numCard==1){
+            newImg.setAttribute('src','assets/back.png');
+            newImg.setAttribute('id','dealerFirstCard');
+            //newImg.setAttribute('alt','assets/'+cardNum+ '_of_' + suit+'.png');
+            hiddenCard=('src','assets/'+cardNum+ '_of_' + suit+'.png');
+        }
         newImg.className+=' card-dealer';
     }
     newImg.style.left = (30+(numCard-1)*10+'%');
