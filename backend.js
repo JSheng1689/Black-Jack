@@ -4,6 +4,7 @@ var suits = {'A': [...lst_suits], 'K': [...lst_suits], 'Q': [...lst_suits], 'J':
 var deckSize = 52;
 var player_cards = []
 var dealer_cards = []
+var betting_amount = 0
 
 function randomDraw(deckSize){//Helper function to randomize card draw
     //Returns the number of the card
@@ -74,6 +75,8 @@ function resetGame(){//Reset all variables, except score
     document.getElementById('addHere').innerHTML = "";
     player_cards=[];
     dealer_cards=[];
+    betting_amount = 0;
+    document.getElementById('bet counter').innerHTML = ('Amount Betted: ' + betting_amount);
 }
 
 // stand returning weird values
@@ -108,3 +111,7 @@ function cardPicture(cardNum,suit,playerOrDealer,numCard){
     document.getElementById('addHere').appendChild(newImg);
 }
 
+function betChip(amount){
+    betting_amount += amount
+    document.getElementById('bet counter').innerHTML = ('Amount Betted: ' + betting_amount);
+}
