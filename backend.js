@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-//testing
-=======
->>>>>>> d7c354359968acab8b1e852e6ca0c150af16fae0
 var deck = {'A': 4, 'K': 4, 'Q': 4, 'J': 4, 10 : 4, 9 : 4, 8 : 4, 7 : 4, 6 : 4, 5 : 4, 4 : 4, 3 : 4, 2 : 4};
 var lst_suits = ['Diamonds', 'Clubs', 'Hearts', 'Spades'];
 var suits = {'A': [...lst_suits], 'K': [...lst_suits], 'Q': [...lst_suits], 'J': [...lst_suits], 10 : [...lst_suits], 9 : [...lst_suits], 8 : [...lst_suits], 7 : [...lst_suits], 6 : [...lst_suits], 5 : [...lst_suits], 4 :  [...lst_suits], 3 : [...lst_suits], 2 : [...lst_suits]};
@@ -14,7 +10,7 @@ function randomDraw(deckSize){//Helper function to randomize card draw
     var select = Math.floor((Math.random() * deckSize) + 1);
     var running = 0;
     //Randomly finds card to draw, without knowing suit
-    for (var card in deck){
+    for (var card in ERRORERRORERRORROSOGDGNDOJNdeck){
         running += deck[card]
         if (running >= select){
             deck[card] -= 1;
@@ -110,8 +106,5 @@ function cardPicture(cardNum,suit,playerOrDealer,numCard){
     }
     newImg.style.left = (30+(numCard-1)*10+'%');
     document.getElementById('addHere').appendChild(newImg);
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> d7c354359968acab8b1e852e6ca0c150af16fae0
+
