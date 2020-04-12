@@ -73,7 +73,12 @@ function hit(hand_to_hit){//hits the dealer or player cards
     //Return value of card hit
     cardDrawn_lst = cardDraw();
     hand_to_hit.push(cardDrawn_lst[0])
+    if(hand_to_hit==player_cards){//puts the card picture on the correct row
     cardPicture(cardDrawn_lst[0],cardDrawn_lst[1],true, hand_to_hit.length);
+    }
+    else{
+        cardPicture(cardDrawn_lst[0],cardDrawn_lst[1],false, hand_to_hit.length);
+    }
     if (calculateHand(hand_to_hit)[0] > 21){
         document.getElementById('result').innerHTML = ('Busted!')
         playerBusted=true;//bust conditional becomes true
