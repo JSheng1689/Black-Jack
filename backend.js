@@ -53,6 +53,9 @@ function dealCards(){//Deals Card
         }
     }
     calculateHand(player_cards)//added this so the player hand score shows
+    document.getElementById('deal').style.display='none';//makes deal disappear and stand and hit appear
+    document.getElementById('stand').style.display='inline';
+    document.getElementById('hit').style.display='inline';
     return [player_cards, dealer_cards];
 }
 
@@ -95,14 +98,18 @@ function resetGame(){//Reset all variables, except score
     lst_suits = ['Diamonds', 'Clubs', 'Hearts', 'Spades'];
     suits = {'A': [...lst_suits], 'K': [...lst_suits], 'Q': [...lst_suits], 'J': [...lst_suits], 10 : [...lst_suits], 9 : [...lst_suits], 8 : [...lst_suits], 7 : [...lst_suits], 6 : [...lst_suits], 5 : [...lst_suits], 4 :  [...lst_suits], 3 : [...lst_suits], 2 : [...lst_suits]};
     deckSize = 52;
-    document.getElementById('outcome').innerHTML = ('Deck Reset!');
     document.getElementById('addHere').innerHTML = "";
     player_cards=[];
     dealer_cards=[];
     betting_amount = 0;
-    document.getElementById('bet counter').innerHTML = ('Amount Betted: ' + betting_amount);
+    document.getElementById('bet counter').innerHTML = ('Bet: ' + betting_amount);
     handInProgress=false;
     playerBusted=false;
+    document.getElementById('deal').style.display='inline';
+    document.getElementById('playAgain').style.display='none';
+    document.getElementById('result').style.display='none';
+    document.getElementById('dealer-score').innerHTML = ('')
+    document.getElementById('playser-score').innerHTML = ('')
 }
 
 // stand returning weird values
@@ -128,6 +135,9 @@ function dealerTurn(player_value){
     var hasAce = false;
     var dealer_sum = calculateHand(dealer_cards)[0]
     var hasAce = calculateHand(dealer_cards)[1]
+    document.getElementById('stand').style.display='none';//makes stand and hit disappear and playAgain appear
+    document.getElementById('hit').style.display='none';
+    document.getElementById('playAgain').style.display='inline';
     if (hasAce){
         if (dealer_sum + 11 > 21){
             dealer_sum += 1
@@ -138,16 +148,17 @@ function dealerTurn(player_value){
     }
     console.log("Sum of dealer hand "+ dealer_sum)
     //Dealer never draws, add in that functionality
+    document.getElementById('result').style.display='inline';//makes the result appear
     if (player_value > dealer_sum && playerBusted==false){ //if the player already busted, the result can't be a win
-        document.getElementById('result').innerHTML = ('Result: You Win!');
+        document.getElementById('result').innerHTML = ('You Win!');
         wallet += (betting_amount*2) //refunds the bet paid and adds the bet again for profit
     }
     else if (player_value == dealer_sum){
-        document.getElementById('result').innerHTML = ('Result: A Push!');
+        document.getElementById('result').innerHTML = ('It\'s A Push!');
         wallet+= betting_amount; //refunds the bet paid
     }
     else{
-        document.getElementById('result').innerHTML = ('Result: Dealer Wins :(');
+        document.getElementById('result').innerHTML = ('Dealer Wins. Thanks for the money loser!');
     }
     document.getElementById('wallet').innerHTML=('$'+wallet); //updates wallet score in html
 
@@ -174,10 +185,22 @@ function cardPicture(cardNum,suit,playerOrDealer,numCard){
 
 function betChip(amount){
     if(handInProgress==false){
-        betting_amount += amount
-        wallet -= amount;
-        document.getElementById('bet counter').innerHTML = ('Amount Betted: ' + betting_amount);
-        document.getElementById('wallet').innerHTML=('$'+wallet); //updates the wallet score
-
+        if(amount>wallet){//gives error if attempting to bet over the wallet amount
+            document.getElementById('bet error').style.display='inline';
+            $(document.getElementById('bet error')).fadeOut(1000);
+        }
+        else{
+            betting_amount += amount
+            wallet -= amount;
+            document.getElementById('bet counter').innerHTML = ('Bet: ' + betting_amount);
+            document.getElementById('wallet').innerHTML=('$'+wallet); //updates the wallet score
+        }
     }
+}
+function resetBet(amount){
+    //resets the bet when pressed
+    wallet+=betting_amount;
+    betting_amount=0;
+    document.getElementById('bet counter').innerHTML = ('Bet: ' + betting_amount);
+    document.getElementById('wallet').innerHTML=('$'+wallet);
 }
