@@ -56,6 +56,8 @@ function dealCards(){//Deals Card
     document.getElementById('deal').style.display='none';//makes deal disappear and stand and hit appear
     document.getElementById('stand').style.display='inline';
     document.getElementById('hit').style.display='inline';
+    var deal_value = calculateHand([dealer_cards[1]]) //shows value of revealed card
+    document.getElementById('dealer-score').innerHTML = deal_value[0] //shows value of revealed card
     return [player_cards, dealer_cards];
 }
 
@@ -108,6 +110,8 @@ function resetGame(){//Reset all variables, except score
     document.getElementById('deal').style.display='inline';
     document.getElementById('playAgain').style.display='none';
     document.getElementById('result').style.display='none';
+    document.getElementById('dealer-score').innerHTML = ''
+    document.getElementById('player-score').innerHTML = ''
 }
 
 // stand returning weird values
