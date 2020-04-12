@@ -52,24 +52,32 @@ function dealCards(){//Deals Card
             cardPicture(card_drawn_lst[0],card_drawn_lst[1],false,dealer_cards.length);
         }
     }
-    calculateHand(player_cards)//added this so the player hand score shows
+
     document.getElementById('deal').style.display='none';//makes deal disappear and stand and hit appear
     document.getElementById('stand').style.display='inline';
     document.getElementById('hit').style.display='inline';
+    var player_value = calculateHand(player_cards)//added this so the player hand score shows
     var deal_value = calculateHand([dealer_cards[1]]) //shows value of revealed card
+    document.getElementById('player-score').innerHTML = player_value[0]
     document.getElementById('dealer-score').innerHTML = deal_value[0] //shows value of revealed card
     return [player_cards, dealer_cards];
 }
 
-function hit(){//hit
+function hit_player(){ //calls hit function with player cards
+    var player_hit = hit(player_cards)
+    var hand_value = calculateHand(player_cards)
+    document.getElementById('player-score').innerHTML = hand_value[0]
+}
+
+function hit(hand_to_hit){//hits the dealer or player cards
     //Return value of card hit
     cardDrawn_lst = cardDraw();
-    player_cards.push(cardDrawn_lst[0])
-    cardPicture(cardDrawn_lst[0],cardDrawn_lst[1],true,player_cards.length);
-    if (calculateHand(player_cards)[0] > 21){
+    hand_to_hit.push(cardDrawn_lst[0])
+    cardPicture(cardDrawn_lst[0],cardDrawn_lst[1],true, hand_to_hit.length);
+    if (calculateHand(hand_to_hit)[0] > 21){
         document.getElementById('result').innerHTML = ('Busted!')
         playerBusted=true;//bust conditional becomes true
-        dealerTurn(calculateHand(player_cards));
+        dealerTurn(calculateHand(hand_to_hit));
     }
     return cardDrawn_lst[0];
 }
@@ -86,12 +94,6 @@ function calculateHand(handArray){
         else{
             value += parseInt(handArray[index])
         }
-    }
-    if (handArray == dealer_cards){
-        document.getElementById('dealer-score').innerHTML = value //updates dealer score in html
-    }
-    else{
-        document.getElementById('player-score').innerHTML = value //updates player score in html
     }
     return [value, hasAce]
 }
@@ -148,7 +150,17 @@ function dealerTurn(player_value){
             dealer_sum += 11
         }
     }
+    while (dealer_sum < 17){
+        dealer_sum += parseInt(hit(dealer_cards))
+        document.getElementById('dealer-score').innerHTML = dealer_sum
+        if (dealer_sum > 21){
+            document.getElementById('result').innerHTML = ('Dealers Busts, You Win!');
+            return 1
+        }
+    }
+
     console.log("Sum of dealer hand "+ dealer_sum)
+    document.getElementById('dealer-score').innerHTML = dealer_sum
     //Dealer never draws, add in that functionality
     document.getElementById('result').style.display='inline';//makes the result appear
     if (player_value > dealer_sum && playerBusted==false){ //if the player already busted, the result can't be a win
