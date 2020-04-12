@@ -1,3 +1,6 @@
+body{
+    font-family:Arial;
+}
 h1{
     color:black;
     
@@ -59,12 +62,20 @@ h1{
     left:450px;
     background-color: purple;
 }
+.reset-bet{
+    position:absolute;
+    bottom:10px;
+    left:560px;
+    background-color: black;
+    color:white;
+}
 .btn-hit{
     height:50px;
     width:100px;
     position:absolute;
     top:400px;
     left:30px;
+    display:none;
 }
 .btn-stand{
     height:50px;
@@ -72,13 +83,14 @@ h1{
     position:absolute;
     top:350px;
     left:30px;
+    display:none;
 }
 .btn-deal{
     height:50px;
     width:100px;
     position:absolute;
     bottom:400px;
-    left:350px;
+    left:300px;
 }
 .btn-playAgain{
     height:50px;
@@ -86,6 +98,7 @@ h1{
     position:absolute;
     bottom:400px;
     left:450px;
+    display:none;
 }
 .card{
     height:20/3%;
@@ -133,8 +146,47 @@ h1{
     background-color:#98fb98;
     border: 2px solid black;
     border-radius:10px;
-    width:200px;
-    height:70px;
-    font-size:50px;
+    width:250px;
+    height:60px;
+    font-size:40px;
     text-align:center;
+}
+.bet-counter{
+    position:absolute;
+    top:100px;
+    left:25px;
+    background-color:#98fb98;
+    border: 2px solid black;
+    border-radius:10px;
+    width:250px;
+    height:60px;
+    font-size:40px;
+    text-align:center;
+}
+.bet-error{
+    position:absolute;
+    text-align:center;
+    background-color:red;
+    color:white;
+    height:75px;
+    width:100%;
+    font-size:50px;
+    top:50%;
+    left: 50%;
+    top: 50%;
+    transform:translate(-50%,-50%);
+    display:none;
+  }
+.result{
+    position:absolute;
+    text-align:center;
+    background-color:black;
+    color:white;
+    height:75px;
+    width:100%;
+    font-size:50px;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    display:none;
 }
