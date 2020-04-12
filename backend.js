@@ -108,8 +108,6 @@ function resetGame(){//Reset all variables, except score
     document.getElementById('deal').style.display='inline';
     document.getElementById('playAgain').style.display='none';
     document.getElementById('result').style.display='none';
-    document.getElementById('dealer-score').innerHTML = ('')
-    document.getElementById('playser-score').innerHTML = ('')
 }
 
 // stand returning weird values
@@ -165,7 +163,7 @@ function dealerTurn(player_value){
 }
 function cardPicture(cardNum,suit,playerOrDealer,numCard){
     //if playerOrComp is true, means it's the player's card. If false, means it's the dealer's card
-    var newImg = document.createElement('img');
+    var newImg = document.createElement('img'); 
     newImg.setAttribute('src','assets/'+cardNum+ '_of_' + suit+'.png');
     newImg.setAttribute('class', 'card');
     if(playerOrDealer){
