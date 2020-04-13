@@ -136,11 +136,11 @@ function stand(){ //sum up current hold
             }
         }
         console.log("Sum of player hand " + player_sum)
-        document.getElementById('dealerFirstCard').src=(hiddenCard);//reveals the dealer's first card that was face down
         dealerTurn(player_sum)
     }
 }
 function dealerTurn(player_value){
+    document.getElementById('dealerFirstCard').src=(hiddenCard);//reveals the dealer's first card that was face down
     var hasAce = false;
     var dealer_sum = calculateHand(dealer_cards)[0]
     var hasAce = calculateHand(dealer_cards)[1]
