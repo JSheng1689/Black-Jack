@@ -159,7 +159,8 @@ function dealerTurn(player_value){
         dealer_sum += parseInt(hit(dealer_cards))
         document.getElementById('dealer-score').innerHTML = dealer_sum
         if (dealer_sum > 21){
-            document.getElementById('result').innerHTML = ('Dealers Busts, You Win!');
+            document.getElementById('result').innerHTML = ('Dealer Busts, You Win!');
+            wallet += (betting_amount*2);
             return 1
         }
     }
