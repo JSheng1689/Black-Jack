@@ -155,7 +155,7 @@ function dealerTurn(player_value){
         document.getElementById('dealer-score').innerHTML = dealer_sum
         if (dealer_sum > 21){
             document.getElementById('result').innerHTML = ('Dealers Busts, You Win!');
-            return 1
+            return 
         }
     }
 
