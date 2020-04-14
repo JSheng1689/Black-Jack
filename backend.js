@@ -217,7 +217,7 @@ function betChip(amount){
 }
 function resetBet(amount){
     //resets the bet when pressed
-    if(handInProgress){
+    if(!(handInProgress)){
         wallet+=betting_amount;
         betting_amount=0;
         document.getElementById('bet counter').innerHTML = ('Bet: ' + betting_amount);
