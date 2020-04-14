@@ -1,4 +1,3 @@
-// Ace value not calculated, betting system, don't show value of dealer hand when calculateHand is called
 var deck = {'A': 4, 'K': 4, 'Q': 4, 'J': 4, 10 : 4, 9 : 4, 8 : 4, 7 : 4, 6 : 4, 5 : 4, 4 : 4, 3 : 4, 2 : 4};
 var lst_suits = ['Diamonds', 'Clubs', 'Hearts', 'Spades'];
 var suits = {'A': [...lst_suits], 'K': [...lst_suits], 'Q': [...lst_suits], 'J': [...lst_suits], 10 : [...lst_suits], 9 : [...lst_suits], 8 : [...lst_suits], 7 : [...lst_suits], 6 : [...lst_suits], 5 : [...lst_suits], 4 :  [...lst_suits], 3 : [...lst_suits], 2 : [...lst_suits]};
@@ -8,8 +7,8 @@ var dealer_cards = []
 var betting_amount = 0
 var wallet = 2000;//amount of money in the bank $$
 var handInProgress = false;//after the cards are dealt, the game is in progress until reset game
-var playerBusted = false;//conditional for if player is over 21
-var hiddenCard; 
+var playerBusted = false;
+
 function randomDraw(deckSize){//Helper function to randomize card draw
     //Returns the number of the card
     var select = Math.floor((Math.random() * deckSize) + 1);
@@ -53,33 +52,51 @@ function dealCards(){//Deals Card
         }
     }
 
-    document.getElementById('deal').style.display='none';//makes deal disappear and stand and hit appear
+    document.getElementById('deal').style.display='none';
     document.getElementById('stand').style.display='inline';
     document.getElementById('hit').style.display='inline';
     var player_value = calculateHand(player_cards)//added this so the player hand score shows
     var deal_value = calculateHand([dealer_cards[1]]) //shows value of revealed card
-    document.getElementById('player-score').innerHTML = player_value[0]
-    document.getElementById('dealer-score').innerHTML = deal_value[0] //shows value of revealed card
+    document.getElementById('player-score').innerHTML = player_value
+    document.getElementById('dealer-score').innerHTML = deal_value //shows value of revealed card
     return [player_cards, dealer_cards];
 }
 
 function hit_player(){ //calls hit function with player cards
     var player_hit = hit(player_cards)
     var hand_value = calculateHand(player_cards)
-    document.getElementById('player-score').innerHTML = hand_value[0]
+    document.getElementById('player-score').innerHTML = hand_value
 }
 
-function hit(hand_to_hit){//hits the dealer or player cards
+function hit(hand_to_hit){//hits the dealer or player cards, alters the input hand
     //Return value of card hit
     cardDrawn_lst = cardDraw();
     hand_to_hit.push(cardDrawn_lst[0])
+    if(hand_to_hit==player_cards){//puts the card picture on the correct row
     cardPicture(cardDrawn_lst[0],cardDrawn_lst[1],true, hand_to_hit.length);
-    if (calculateHand(hand_to_hit)[0] > 21){
-        document.getElementById('result').innerHTML = ('Busted!')
-        playerBusted=true;//bust conditional becomes true
-        dealerTurn(calculateHand(hand_to_hit));
     }
+    else{
+        cardPicture(cardDrawn_lst[0],cardDrawn_lst[1],false, hand_to_hit.length);
+    }
+    if ((calculateHand(hand_to_hit) > 21) && (hand_to_hit == player_cards)){
+        playerBusted=true;
+        bust_after_hit(playerBusted);
+    } 
     return cardDrawn_lst[0];
+}
+function bust_after_hit(didBust){ //Mainly sets up result screen, in addition to checking if player busts
+    document.getElementById('dealerFirstCard').src=(hiddenCard);//reveals the dealer's first card that was face down
+    var dealer_sum = calculateHand(dealer_cards)
+    document.getElementById('stand').style.display='none';//makes stand and hit disappear and playAgain appear
+    document.getElementById('hit').style.display='none';
+    document.getElementById('playAgain').style.display='inline';
+    document.getElementById('result').style.display='inline';//makes the result appear
+    if (didBust){
+        document.getElementById('result').innerHTML = 'Bust! Dealer Wins!'
+        document.getElementById('wallet').innerHTML=('$'+wallet); //updates wallet score in html
+        document.getElementById('dealer-score').innerHTML = dealer_sum
+    }
+    return dealer_sum
 }
 function calculateHand(handArray){
     var hasAce = false;
@@ -95,7 +112,15 @@ function calculateHand(handArray){
             value += parseInt(handArray[index])
         }
     }
-    return [value, hasAce]
+    if (hasAce){
+        if ((value + 11) > 21){
+            value += 1
+        }
+        else{
+            value += 11
+        }
+    }
+    return value
 }
 function resetGame(){//Reset all variables, except score
     deck = {'A': 4, 'K': 4, 'Q': 4, 'J': 4, 10 : 4, 9 : 4, 8 : 4, 7 : 4, 6 : 4, 5 : 4, 4 : 4, 3 : 4, 2 : 4};
@@ -116,53 +141,27 @@ function resetGame(){//Reset all variables, except score
     document.getElementById('player-score').innerHTML = ''
 }
 
-// stand returning weird values
 function stand(){ //sum up current hold
     if(playerBusted==false){ //if the player busted, the stand function is disabled
-        var hasAce = false;
-        var player_sum = calculateHand(player_cards)[0]
-        var hasAce = calculateHand(player_cards)[1]
-        if (hasAce){
-            if (player_sum + 11 > 21){
-                player_sum += 1
-            }
-            else{
-                player_sum += 11
-            }
-        }
-        console.log("Sum of player hand " + player_sum)
-        document.getElementById('dealerFirstCard').src=(hiddenCard);//reveals the dealer's first card that was face down
+        var player_sum = calculateHand(player_cards)
         dealerTurn(player_sum)
     }
 }
 function dealerTurn(player_value){
-    var hasAce = false;
-    var dealer_sum = calculateHand(dealer_cards)[0]
-    var hasAce = calculateHand(dealer_cards)[1]
-    document.getElementById('stand').style.display='none';//makes stand and hit disappear and playAgain appear
-    document.getElementById('hit').style.display='none';
-    document.getElementById('playAgain').style.display='inline';
-    if (hasAce){
-        if (dealer_sum + 11 > 21){
-            dealer_sum += 1
-        }
-        else{
-            dealer_sum += 11
-        }
-    }
+    var dealer_sum = bust_after_hit(playerBusted)
     while (dealer_sum < 17){
-        dealer_sum += parseInt(hit(dealer_cards))
+        hit(dealer_cards)//adjusts dealer_cards, no double counting
+        dealer_sum = calculateHand(dealer_cards)
         document.getElementById('dealer-score').innerHTML = dealer_sum
         if (dealer_sum > 21){
-            document.getElementById('result').innerHTML = ('Dealers Busts, You Win!');
+            document.getElementById('result').innerHTML = ('Dealer Busts, You Win!');
+            wallet += (betting_amount*2);
+            document.getElementById('wallet').innerHTML=('$'+wallet);
             return 
         }
     }
-
-    console.log("Sum of dealer hand "+ dealer_sum)
     document.getElementById('dealer-score').innerHTML = dealer_sum
     //Dealer never draws, add in that functionality
-    document.getElementById('result').style.display='inline';//makes the result appear
     if (player_value > dealer_sum && playerBusted==false){ //if the player already busted, the result can't be a win
         document.getElementById('result').innerHTML = ('You Win!');
         wallet += (betting_amount*2) //refunds the bet paid and adds the bet again for profit
@@ -177,6 +176,7 @@ function dealerTurn(player_value){
     document.getElementById('wallet').innerHTML=('$'+wallet); //updates wallet score in html
 
 }
+
 function cardPicture(cardNum,suit,playerOrDealer,numCard){
     //if playerOrComp is true, means it's the player's card. If false, means it's the dealer's card
     var newImg = document.createElement('img'); 
@@ -210,11 +210,17 @@ function betChip(amount){
             document.getElementById('wallet').innerHTML=('$'+wallet); //updates the wallet score
         }
     }
+    else{
+        document.getElementById('in progress').style.display='inline';
+        $(document.getElementById('in progress')).fadeOut(1000);
+    }
 }
 function resetBet(amount){
     //resets the bet when pressed
-    wallet+=betting_amount;
-    betting_amount=0;
-    document.getElementById('bet counter').innerHTML = ('Bet: ' + betting_amount);
-    document.getElementById('wallet').innerHTML=('$'+wallet);
+    if(handInProgress){
+        wallet+=betting_amount;
+        betting_amount=0;
+        document.getElementById('bet counter').innerHTML = ('Bet: ' + betting_amount);
+        document.getElementById('wallet').innerHTML=('$'+wallet);
+    }
 }
