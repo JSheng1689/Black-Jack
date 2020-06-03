@@ -103,6 +103,7 @@ function calculateHand(handArray){
     var value = 0;
     for (index = 0; index < handArray.length; index ++){
         if (handArray[index] == 'A'){
+            value += 11
             hasAce = true;
         }
         else if (handArray[index] == 'K' || handArray[index] == 'Q' || handArray[index] == 'J'){
@@ -112,14 +113,13 @@ function calculateHand(handArray){
             value += parseInt(handArray[index])
         }
     }
+    while (value > 21){
     if (hasAce){
-        if ((value + 11) > 21){
-            value += 1
-        }
-        else{
-            value += 11
+        if ((value) > 21){
+            value -= 10
         }
     }
+}
     return value
 }
 function resetGame(){//Reset all variables, except score
