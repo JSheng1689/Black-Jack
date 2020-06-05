@@ -171,7 +171,7 @@ function dealerTurn(player_value){
         wallet+= betting_amount; //refunds the bet paid
     }
     else{
-        document.getElementById('result').innerHTML = ('Dealer Wins. Thanks for the money loser!');
+        document.getElementById('result').innerHTML = ('Dealer Wins');
     }
     document.getElementById('wallet').innerHTML=('$'+wallet); //updates wallet score in html
 
